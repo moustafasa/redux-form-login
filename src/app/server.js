@@ -90,7 +90,7 @@ server.use((req, res, next) => {
 // A middleware to handle user registration
 server.post("/register", (req, res) => {
   // Get the user data from the request body
-  const { username, password, roles } = req.body;
+  const { username, password, roles = ["USER"] } = req.body;
 
   // Check if the username is already taken
   const existingUser = db.get("users").find({ username }).value();
@@ -274,7 +274,7 @@ server.use(checkAuth);
 
 // Apply the checkRole middleware to specific routes
 server.use("/users", checkRole("ADMIN")); // Only users with the 'ADMIN' role can access the /users route
-server.use("/users/:id", checkRole("USER")); // Only users with the 'USER' role can access the /users/:id route
+server.use("/users/:id", checkRole("ADMIN")); // Only users with the 'USER' role can access the /users/:id route
 
 server.get("/users", (req, res) => {
   const users = db.get("users").value();
@@ -285,6 +285,40 @@ server.get("/user", (req, res) => {
   const user = db.get("users").find({ id: req.userId });
   res.status(200).send(JSON.stringify(user));
 });
+
+server.get("/users/:id", (req, res) => {
+  const { id } = req.params;
+  const user = db.get("users").find({ id }).value();
+  if (user) {
+    res.status(201).send(JSON.stringify(user));
+  } else {
+    res.status(404).send("user not found");
+  }
+});
+
+server.put("/users/:id", (req, res) => {
+  const { id } = req.params;
+  const { username, password } = req.body;
+  const user = db.get("users").find({ id }).value();
+
+  if (user.username) {
+    if (username) {
+      if (db.get("user").find({ username }).value()) {
+        return res.status(409).send("username already taken");
+      } else {
+        user.username = username;
+      }
+    }
+    if (password) {
+      user.password = password;
+    }
+    db.write();
+    res.status(201).send("user updated successfully");
+  } else {
+    res.status(404).send("user not found");
+  }
+});
+
 // Use the default router
 server.use(router);
 

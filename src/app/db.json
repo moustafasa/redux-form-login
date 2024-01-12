@@ -6,7 +6,8 @@
       "password": "$2a$10$ZImCN..X7iXI76XmHQ2nd.q3wTOLwx4.dETfSAYEKcYWKtwKyrNxS",
       "roles": [
         "ADMIN"
-      ]
+      ],
+      "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4Y2QxYzMxYTQ4IiwidXNlcm5hbWUiOiJtb3VzdGFmYSIsInJvbGVzIjpbIkFETUlOIl0sImRhdGUiOiIzNWNhZTljMWU1Ljk2OTYiLCJpYXQiOjE3MDUwMzA0NDQsImV4cCI6MTcwNTAzNDA0NH0.glYpC3mT1cGKsN8zm5HMMZCLQQGl3gR4uTBScODGLRs"
     },
     {
       "id": "18cd1c31a49",
@@ -22,8 +23,7 @@
       "password": "$2a$10$ZImCN..X7iXI76XmHQ2nd.q3wTOLwx4.dETfSAYEKcYWKtwKyrNxS",
       "roles": [
         "EDITOR"
-      ],
-      "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4Y2QxYzMxYTQ2IiwidXNlcm5hbWUiOiJhaG1lZCIsInJvbGVzIjpbIkVESVRPUiJdLCJkYXRlIjoiMTM4Mzk3Njk2YmEuN2JmIiwiaWF0IjoxNzA0NzM4MTk0LCJleHAiOjE3MDQ3MzgyMDR9.ScmaP5wSB8waMReYbHPuiApcYBuxDH_xSgpBLhZ9mVY"
+      ]
     },
     {
       "id": "18cd735fafd",
@@ -34,13 +34,36 @@
       ]
     },
     {
-      "id": "18cd7dc90bd",
+      "id": "18cfb143c85",
       "username": "mahmoud",
-      "password": "$2a$10$MHZGF5v9H1l4i6fsUlBBF.5bG3rI469lIex38piqRfLhz/nN8wK1a",
       "roles": [
         "USER"
       ],
-      "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4Y2Q3ZGM5MGJkIiwidXNlcm5hbWUiOiJtYWhtb3VkIiwicm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE3MDQ0MzAyODQsImV4cCI6MTcwNDQzMzg4NH0.vQEi0nQqlKr0LiMk6YIDh-b7Jw17hHrj4THji_XZsP0"
+      "password": "$2a$10$YE21GOb11P7iMt3YllBLheMJbU5I22hzXodgKqKF42Va5Fw8QPVX."
+    },
+    {
+      "id": "18cfb18082a",
+      "username": "Most",
+      "roles": [
+        "USER"
+      ],
+      "password": "$2a$10$FAaVM4lGBvPIbFFHCCkvbuGYm6DhQtzUhMuAQu8nKrFNZXTC2lZLG"
+    },
+    {
+      "id": "18cfb1967c5",
+      "username": "Mostaf",
+      "roles": [
+        "USER"
+      ],
+      "password": "$2a$10$mHTNWcILXlZ9Xr09yCUfKO6eXIWkuuQrJ3qmlGh4kcVr0RsEAKl7u"
+    },
+    {
+      "id": "18cfb1a29f1",
+      "username": "abde",
+      "roles": [
+        "USER"
+      ],
+      "password": "$2a$10$P/uzeqPlOApom0K7zHQGregS6LrGbPse/kbqe658njeBjSAn63vFS"
     }
   ]
 }

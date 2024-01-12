@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, Button, Container, Form } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 import { FaCircleInfo } from "react-icons/fa6";
-import Feedback from "react-bootstrap/esm/Feedback";
-import { useRegisterMutation } from "./authApiSlice";
-import { setCredentials } from "./authSlice";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../auth/authApiSlice";
+import { setCredentials } from "../auth/authSlice";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useGetUserQuery } from "./usersApiSlice";
 
-const Register = () => {
+const EditUser = () => {
+  const { id } = useParams();
+  const { data: userObj } = useGetUserQuery(id);
   const NAME_RGX = /^[a-zA-Z][a-zA-Z0-9]{3,23}$/;
   const PASS_RGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%/]).{8,24}$/;
   const userRef = useRef();
@@ -37,6 +39,10 @@ const Register = () => {
   useEffect(() => {
     userRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    setUser(userObj?.username || "");
+  }, [userObj]);
 
   useEffect(() => {
     if (errMsg) {
@@ -93,7 +99,7 @@ const Register = () => {
           <span className="text-capitalize"> {errMsg}</span>
         </Alert>
       )}
-      <h2 className="text-center mb-3">register</h2>
+      <h2 className="text-center mb-3">edit user</h2>
       <Form.Group className="mb-3" controlId="username">
         <Form.Label>username</Form.Label>
         <Form.Control
@@ -123,10 +129,10 @@ const Register = () => {
           isInvalid={passFocus && !passValid && pass}
           isValid={passValid}
         />
-        <Feedback type="invalid">
+        <Form.Control.Feedback type="invalid">
           password should contain capital and small letters , numbers ,
           @#$%^&+/= and should be between 8 to 20 character
-        </Feedback>
+        </Form.Control.Feedback>
       </Form.Group>
       <Form.Group className="mb-3" controlId="confirm-pass">
         <Form.Label>confirm password</Form.Label>
@@ -139,9 +145,9 @@ const Register = () => {
           isInvalid={passConfirmFocus && !passConfirmValid && passConfirm}
           isValid={passConfirmValid}
         />
-        <Feedback type="invalid">
+        <Form.Control.Feedback type="invalid">
           confirm password should match the first password
-        </Feedback>
+        </Form.Control.Feedback>
       </Form.Group>
       <Button
         type="submit"
@@ -153,4 +159,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default EditUser;

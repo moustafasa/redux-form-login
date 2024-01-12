@@ -5,7 +5,18 @@ const usersApiSlice = apiSlice.injectEndpoints({
     getUsers: builder.query({
       query: () => "/users",
     }),
+    getUser: builder.query({
+      query: (id) => `/users/${id}`,
+    }),
+    editUser: builder.mutation({
+      query: ({ user, data }) => ({
+        url: `/user/${user}`,
+        method: "put",
+        data,
+      }),
+    }),
   }),
 });
 
-export const { useGetUsersQuery } = apiSlice;
+export const { useGetUsersQuery, useGetUserQuery, useEditUserMutation } =
+  apiSlice;

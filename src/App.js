@@ -23,6 +23,7 @@ import PersistLogin from "./features/auth/PersistLogin";
 import UnAuthorized from "./features/auth/UnAuthorized";
 import Users from "./features/users/Users";
 import AddUser from "./features/users/AddUser";
+import EditUser from "./features/users/EditUser";
 
 function App() {
   const token = useSelector(getCurrentToken);
@@ -48,6 +49,7 @@ function App() {
             <Route path="/dashboard" element={<DashBoard />}>
               <Route index element={<Users />} />
               <Route path="addUser" element={<AddUser />} />
+              <Route path=":id" element={<EditUser />} />
             </Route>
           </Route>
         </Route>

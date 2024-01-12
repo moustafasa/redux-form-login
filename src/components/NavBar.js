@@ -8,18 +8,18 @@ const NavBar = () => {
   const token = useSelector(getCurrentToken);
   const [logout] = useLogOutMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const logOutHandler = async () => {
     try {
       await logout().unwrap();
       dispatch(logOut());
+      navigate("/");
     } catch (err) {}
   };
 
   const navContent = (
-    <Navbar.Collapse
-      className={`text-capitalize ${token ? "" : "justify-content-end"}`}
-    >
+    <Navbar.Collapse className={`text-capitalize `}>
       {token ? (
         <>
           <Nav className="gap-sm-2 me-auto">
@@ -40,16 +40,21 @@ const NavBar = () => {
           </Nav>
         </>
       ) : (
-        <Nav className="gap-2">
-          <>
+        <>
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to={"/"}>
+              home
+            </Nav.Link>{" "}
+          </Nav>
+          <Nav className="gap-2">
             <Link to={"/login"} className="btn btn-primary  text-capitalize">
               log in
             </Link>
             <Link to={"/register"} className="btn btn-primary text-capitalize">
               register
             </Link>
-          </>
-        </Nav>
+          </Nav>
+        </>
       )}
     </Navbar.Collapse>
   );

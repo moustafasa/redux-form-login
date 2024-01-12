@@ -54,7 +54,7 @@ const mutex = new Mutex();
 const baseQueryReauth = async (args, api, extra) => {
   await mutex.waitForUnlock();
   let res = await axiosBaseQuery(args, api, extra);
-  if (res?.error?.status === 401) {
+  if (res?.error?.status === 401 && args !== "/refresh") {
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
       try {

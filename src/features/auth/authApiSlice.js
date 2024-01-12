@@ -31,4 +31,5 @@ export const {
   useGetUsersQuery,
   useRefreshMutation,
   useLogOutMutation,
+  useRegisterMutation,
 } = authApiSlice;
