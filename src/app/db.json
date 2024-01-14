@@ -7,12 +7,12 @@
       "roles": [
         "ADMIN"
       ],
-      "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4Y2QxYzMxYTQ4IiwidXNlcm5hbWUiOiJtb3VzdGFmYSIsInJvbGVzIjpbIkFETUlOIl0sImRhdGUiOiIzNWNhZTljMWU1Ljk2OTYiLCJpYXQiOjE3MDUwMzA0NDQsImV4cCI6MTcwNTAzNDA0NH0.glYpC3mT1cGKsN8zm5HMMZCLQQGl3gR4uTBScODGLRs"
+      "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4Y2QxYzMxYTQ4IiwidXNlcm5hbWUiOiJtb3VzdGFmYSIsInJvbGVzIjpbIkFETUlOIl0sImRhdGUiOiIzZTYzMzdkNTUwLmQxNTQiLCJpYXQiOjE3MDUxNDY0MDQsImV4cCI6MTcwNTE1MDAwNH0.6n6e0mqUadTERPIussPE0yv6IjeymV5H3A5AefazvE4"
     },
     {
       "id": "18cd1c31a49",
-      "username": "mohamed",
-      "password": "$2a$10$ZImCN..X7iXI76XmHQ2nd.q3wTOLwx4.dETfSAYEKcYWKtwKyrNxS",
+      "username": "abas",
+      "password": "Mos@25/9/2001",
       "roles": [
         "USER"
       ]

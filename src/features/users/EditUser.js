@@ -5,11 +5,13 @@ import { useRegisterMutation } from "../auth/authApiSlice";
 import { setCredentials } from "../auth/authSlice";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useGetUserQuery } from "./usersApiSlice";
+import { useEditUserMutation, useGetUserQuery } from "./usersApiSlice";
 
 const EditUser = () => {
   const { id } = useParams();
   const { data: userObj } = useGetUserQuery(id);
+  const [editUser] = useEditUserMutation();
+
   const NAME_RGX = /^[a-zA-Z][a-zA-Z0-9]{3,23}$/;
   const PASS_RGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%/]).{8,24}$/;
   const userRef = useRef();
@@ -29,12 +31,7 @@ const EditUser = () => {
 
   const [errMsg, setErrMsg] = useState();
 
-  const [register] = useRegisterMutation();
-  const dispatch = useDispatch();
-
   const navigator = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from || "/";
 
   useEffect(() => {
     userRef.current?.focus();
@@ -67,9 +64,10 @@ const EditUser = () => {
       return;
     }
     try {
-      const res = await register({ username: user, password: pass }).unwrap();
-      dispatch(setCredentials({ user, ...res }));
-      navigator(from, { replace: true });
+      await editUser({
+        user: userObj.id,
+        data: { username: user, password: pass },
+      }).unwrap();
     } catch (err) {
       if (!err.status) {
         setErrMsg("network err");
@@ -109,7 +107,7 @@ const EditUser = () => {
           onBlur={() => setUserFocus(false)}
           onFocus={() => setUserFocus(true)}
           isInvalid={userFocus && !userValid && user}
-          isValid={userValid}
+          isValid={userValid && user !== userObj?.username}
           autoComplete="off"
           ref={userRef}
         />
@@ -152,6 +150,12 @@ const EditUser = () => {
       <Button
         type="submit"
         className="text-capitalize d-block mx-auto mt-4 px-3"
+        disabled={
+          user === userObj?.username ||
+          !passValid ||
+          !userValid ||
+          !passConfirmValid
+        }
       >
         sign up
       </Button>

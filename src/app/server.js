@@ -70,7 +70,7 @@ const checkOrigin = (req, res, next) => {
 server.use(checkOrigin);
 
 server.use((req, res, next) => {
-  if (req.method === "POST" && req.path === "/register") {
+  if (req.method === "POST") {
     // Hash the password with bcrypt
     bcrypt.hash(req.body.password, SALT_ROUNDS, (err, hash) => {
       if (err) {
@@ -300,10 +300,10 @@ server.put("/users/:id", (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
   const user = db.get("users").find({ id }).value();
-
+  console.log(user);
   if (user.username) {
     if (username) {
-      if (db.get("user").find({ username }).value()) {
+      if (db.get("users").find({ username }).value()) {
         return res.status(409).send("username already taken");
       } else {
         user.username = username;

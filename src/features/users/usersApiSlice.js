@@ -4,13 +4,17 @@ const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query({
       query: () => "/users",
+      providesTags: (data) => {
+        console.log(data);
+        return [];
+      },
     }),
     getUser: builder.query({
       query: (id) => `/users/${id}`,
     }),
     editUser: builder.mutation({
       query: ({ user, data }) => ({
-        url: `/user/${user}`,
+        url: `/users/${user}`,
         method: "put",
         data,
       }),
@@ -19,4 +23,4 @@ const usersApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { useGetUsersQuery, useGetUserQuery, useEditUserMutation } =
-  apiSlice;
+  usersApiSlice;
