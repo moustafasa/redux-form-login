@@ -1,29 +1,32 @@
 {
   "users": [
     {
-      "id": "18d06a48b17",
-      "username": "moustafa",
+      "id": "18d0bba6d6e",
+      "email": "moustafasaad954@gmail.com",
       "roles": [
         "ADMIN"
       ],
-      "password": "$2a$10$z2B5k9LjaymiE7gxBQyqWeuSuX4pCW7UzvqeS17PAD/CFdf/neSPy",
-      "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4ZDA2YTQ4YjE3IiwidXNlcm5hbWUiOiJtb3VzdGFmYSIsInJvbGVzIjpbIkFETUlOIl0sImRhdGUiOiIxMzVlZDY4ZGYxNC5lYzIiLCJpYXQiOjE3MDUyMzE3NDYsImV4cCI6MTcwNTIzNTM0Nn0.gUdzymt8n1A1pie7cQ3VxKMdMCBOIrg9UTjBKqT3Kso"
+      "name": "moustafa saad",
+      "password": "$2a$10$kEfnJsUm0KhtvaK.IXF3ZuhTSjcpp59Bp3eQOd82lCGfTa1D1mg6W",
+      "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4ZDBiYmE2ZDZlIiwiZW1haWwiOiJtb3VzdGFmYXNhYWQ5NTRAZ21haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXSwiZGF0ZSI6ImVmMmZmYWRjNjkuNzIiLCJpYXQiOjE3MDUzMDk2NDQsImV4cCI6MTcwNTMxMzI0NH0.lI_ec3ERAWfCNK53Hau7w4eR6b0CpLt2g4-5gn7NuTo"
     },
     {
-      "id": "18d06a4fa8b",
-      "username": "mahmoud",
+      "id": "18d0bbbcb10",
+      "email": "mohamed@gmail.com",
       "roles": [
         "USER"
       ],
-      "password": "$2a$10$EpT/nbMZiv4LuT5qGnOGp.l67NtpvN7cjM0mMKchISO7iJQlPHbNO"
+      "name": "mohamed",
+      "password": "$2a$10$dfKAPvBXLo5BiRX5W0ef1uB62msI2dJlos5gTT6EwRDA1v.zlJBPS"
     },
     {
-      "id": "18d06c79ad7",
-      "username": "ashraf",
+      "id": "18d0c4fb8f9",
+      "email": "abdallah@gmail.com",
       "roles": [
         "USER"
       ],
-      "password": "$2a$10$gc1fuO6Fgu3OHkCXi0QGqOEpD5kLTCzB1nbOxgrc8K3Y6bQX6.sm."
+      "name": "abdallah",
+      "password": "$2a$10$Hr4InXj1YIv3sXHMavA4d.QFcMvGQttsozqefP.2/JKadqRI6Wb6."
     }
   ]
 }

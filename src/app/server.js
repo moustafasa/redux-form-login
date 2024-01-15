@@ -90,22 +90,25 @@ server.use((req, res, next) => {
 // A middleware to handle user registration
 server.post("/register", (req, res) => {
   // Get the user data from the request body
-  const { username, password, roles = ["USER"] } = req.body;
+  const { name, email, password, roles = ["USER"] } = req.body;
 
   // Check if the username is already taken
-  const existingUser = db.get("users").find({ username }).value();
+  const existingUser = db
+    .get("users")
+    .find({ email: email.toLowerCase() })
+    .value();
   if (existingUser) {
     // Return a 409 Conflict response
-    res.status(409).send("username already exists");
+    res.status(409).send("email already exists");
   } else {
     // Create a new user record
     const payload = {
       id: new Date().getTime().toString(16),
-      username,
+      email: email.toLowerCase(),
       roles,
     };
     db.get("users")
-      .push({ ...payload, password })
+      .push({ ...payload, name, password })
       .write();
 
     // Create a token for the new user
@@ -121,22 +124,25 @@ server.post("/register", (req, res) => {
 // A middleware to handle user registration
 server.post("/users/add", (req, res) => {
   // Get the user data from the request body
-  const { username, password, roles = ["USER"] } = req.body;
+  const { name, email, password, roles = ["USER"] } = req.body;
 
   // Check if the username is already taken
-  const existingUser = db.get("users").find({ username }).value();
+  const existingUser = db
+    .get("users")
+    .find({ email: email.toLowerCase() })
+    .value();
   if (existingUser) {
     // Return a 409 Conflict response
-    res.status(409).send("username already exists");
+    res.status(409).send("email already exists");
   } else {
     // Create a new user record
     const payload = {
       id: new Date().getTime().toString(16),
-      username,
+      email: email.toLowerCase(),
       roles,
     };
     db.get("users")
-      .push({ ...payload, password })
+      .push({ ...payload, name, password })
       .write();
 
     // Return a 201 Created response with the token
@@ -147,10 +153,10 @@ server.post("/users/add", (req, res) => {
 // A middleware to handle user login
 server.post("/login", (req, res) => {
   // Get the credentials from the request body
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   // Find the user by username
-  const user = db.get("users").find({ username }).value();
+  const user = db.get("users").find({ email: email.toLowerCase() }).value();
   if (user) {
     // Compare the password with the hashed one
     bcrypt.compare(password, user.password, (err, result) => {
@@ -161,7 +167,7 @@ server.post("/login", (req, res) => {
         if (result) {
           const payload = {
             id: user.id,
-            username: user.username,
+            email: email.toLowerCase(),
             roles: user.roles,
           };
           // Passwords match, create a token for the user
@@ -201,7 +207,7 @@ server.get("/refresh", (req, res) => {
       const accessToken = createToken(
         {
           id: user.id,
-          username: user.username,
+          email: user.email,
           roles: user.roles,
         },
         "access"
@@ -313,7 +319,6 @@ server.get("/user", (req, res) => {
 });
 
 server.get("/users/:id", (req, res) => {
-  console.log("dsjalkfd");
   const { id } = req.params;
   const user = db.get("users").find({ id }).value();
   if (user) {
@@ -325,18 +330,21 @@ server.get("/users/:id", (req, res) => {
 
 server.put("/users/update/:id", (req, res) => {
   const { id } = req.params;
-  const { username, password } = req.body;
+  const { name, email, password } = req.body;
   const user = db.get("users").find({ id }).value();
-  if (user.username) {
-    if (username) {
-      if (db.get("users").find({ username }).value()) {
+  if (user?.email) {
+    if (email && email !== user?.email) {
+      if (db.get("users").find({ email }).value()) {
         return res.status(409).send("username already taken");
       } else {
-        user.username = username;
+        user.email = email;
       }
     }
     if (password) {
       user.password = password;
+    }
+    if (name) {
+      user.name = name;
     }
     db.write();
     res.status(201).send("user updated successfully");
@@ -346,7 +354,6 @@ server.put("/users/update/:id", (req, res) => {
 });
 
 server.delete("/users/delete/:id", (req, res) => {
-  console.log("jkldsajfdsajlk");
   const { id } = req.params;
   const user = db.get("users").find({ id }).value();
   if (user) {

@@ -17,7 +17,8 @@ const Users = () => {
         <thead>
           <tr>
             <th>#</th>
-            <th>username</th>
+            <th>name</th>
+            <th>email</th>
             <th>options</th>
           </tr>
         </thead>
@@ -25,7 +26,8 @@ const Users = () => {
           {users.map((user, id) => (
             <tr key={user.id}>
               <td>{id + 1}</td>
-              <td>{user.username}</td>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
               <td>
                 <div className="d-flex align-items-center justify-content-center gap-3">
                   <Button

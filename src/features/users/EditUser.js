@@ -1,10 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Button, Form } from "react-bootstrap";
 import { FaCircleInfo } from "react-icons/fa6";
-import { useRegisterMutation } from "../auth/authApiSlice";
-import { setCredentials } from "../auth/authSlice";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEditUserMutation, useGetUserQuery } from "./usersApiSlice";
 
 const EditUser = () => {
@@ -12,14 +9,19 @@ const EditUser = () => {
   const { data: userObj } = useGetUserQuery(id);
   const [editUser] = useEditUserMutation();
 
-  const NAME_RGX = /^[a-zA-Z][a-zA-Z0-9]{3,23}$/;
+  const NAME_RGX = /^(?=.{4,24}$)[a-zA-Z]+(\s[a-zA-Z]*)*$/;
+  const EMAIL_RGX = /^[a-zA-Z0-9]+@[a-zA-Z]+[.][a-zA-Z]+$/;
   const PASS_RGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%/]).{8,24}$/;
-  const userRef = useRef();
+  const nameRef = useRef();
   const errorRef = useRef();
 
-  const [user, setUser] = useState("");
-  const [userValid, setUserValid] = useState(false);
-  const [userFocus, setUserFocus] = useState(false);
+  const [name, setName] = useState("");
+  const [nameValid, setNameValid] = useState(false);
+  const [nameFocus, setNameFocus] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const [emailValid, setEmailValid] = useState(false);
+  const [emailFocus, setEmailFocus] = useState(false);
 
   const [pass, setPass] = useState("");
   const [passValid, setPassValid] = useState(false);
@@ -34,12 +36,13 @@ const EditUser = () => {
   const navigator = useNavigate();
 
   useEffect(() => {
-    userRef.current?.focus();
-  }, []);
+    setName(userObj?.name || "");
+    setEmail(userObj?.email || "");
+  }, [userObj]);
 
   useEffect(() => {
-    setUser(userObj?.username || "");
-  }, [userObj]);
+    nameRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     if (errMsg) {
@@ -48,8 +51,12 @@ const EditUser = () => {
   }, [errMsg]);
 
   useEffect(() => {
-    setUserValid(NAME_RGX.test(user));
-  }, [user]);
+    setNameValid(NAME_RGX.test(name));
+  }, [name]);
+
+  useEffect(() => {
+    setEmailValid(EMAIL_RGX.test(email));
+  }, [email]);
 
   useEffect(() => {
     setPassValid(PASS_RGX.test(pass));
@@ -59,27 +66,32 @@ const EditUser = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (!NAME_RGX.test(user) || !PASS_RGX.test(pass)) {
+    if (
+      !NAME_RGX.test(name) ||
+      !PASS_RGX.test(pass) ||
+      !EMAIL_RGX.test(email)
+    ) {
       setErrMsg("invalid Entry");
       return;
     }
     try {
       await editUser({
         user: userObj.id,
-        data: { username: user, password: pass },
+        data: { name, email, password: pass },
       }).unwrap();
+      navigator("/dashboard/users");
     } catch (err) {
+      console.log(err);
       if (!err.status) {
         setErrMsg("network err");
       } else if (err.status === 409) {
-        setErrMsg("the username is already exist");
+        setErrMsg("the email is already exist");
       } else {
         setErrMsg("register failed");
       }
+      setPass("");
+      setPassConfirm("");
     }
-    setPass("");
-    setPassConfirm("");
-    navigator("/dashboard/users");
   };
 
   return (
@@ -97,23 +109,42 @@ const EditUser = () => {
           <span className="text-capitalize"> {errMsg}</span>
         </Alert>
       )}
-      <h2 className="text-center mb-3">edit user</h2>
-      <Form.Group className="mb-3" controlId="username">
-        <Form.Label>username</Form.Label>
+      <h2 className="text-center mb-3">update user</h2>
+      <Form.Group className="mb-3" controlId="name">
+        <Form.Label>name</Form.Label>
         <Form.Control
           type="text"
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
-          onBlur={() => setUserFocus(false)}
-          onFocus={() => setUserFocus(true)}
-          isInvalid={userFocus && !userValid && user}
-          isValid={userValid && user !== userObj?.username}
+          value={name}
+          onChange={(e) =>
+            setName(e.target.value.replace(/\s{2,}/g, " ").trimStart())
+          }
+          onBlur={() => setNameFocus(false)}
+          onFocus={() => setNameFocus(true)}
+          isInvalid={nameFocus && !nameValid && name}
+          isValid={nameValid && name !== userObj?.name}
           autoComplete="off"
-          ref={userRef}
+          ref={nameRef}
         />
         <Form.Control.Feedback type="invalid">
-          the username should contain only letters or number and should start
-          with letter and it contain 4-23 characters
+          the name should contain only letters or space and should start with
+          letter and contain 4-23 characters
+        </Form.Control.Feedback>
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="email">
+        <Form.Label>email</Form.Label>
+        <Form.Control
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => setEmailFocus(false)}
+          onFocus={() => setEmailFocus(true)}
+          isInvalid={emailFocus && !emailValid && email}
+          isValid={emailValid && email !== userObj?.email}
+          autoComplete="off"
+          required
+        />
+        <Form.Control.Feedback type="invalid">
+          please write a valid email
         </Form.Control.Feedback>
       </Form.Group>
       <Form.Group className="mb-3" controlId="pass">
@@ -150,14 +181,8 @@ const EditUser = () => {
       <Button
         type="submit"
         className="text-capitalize d-block mx-auto mt-4 px-3"
-        disabled={
-          user === userObj?.username ||
-          !passValid ||
-          !userValid ||
-          !passConfirmValid
-        }
       >
-        update
+        sign up
       </Button>
     </Form>
   );

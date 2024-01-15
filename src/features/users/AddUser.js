@@ -12,14 +12,21 @@ import {
 } from "./usersApiSlice";
 
 const AddUser = () => {
-  const NAME_RGX = /^[a-zA-Z][a-zA-Z0-9]{3,23}$/;
+  const [addUser] = useAddUserMutation();
+
+  const NAME_RGX = /^(?=.{4,24}$)[a-zA-Z]+(\s[a-zA-Z]*)*$/;
+  const EMAIL_RGX = /^[a-zA-Z0-9]+@[a-zA-Z]+[.][a-zA-Z]+$/;
   const PASS_RGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%/]).{8,24}$/;
-  const userRef = useRef();
+  const nameRef = useRef();
   const errorRef = useRef();
 
-  const [user, setUser] = useState("");
-  const [userValid, setUserValid] = useState(false);
-  const [userFocus, setUserFocus] = useState(false);
+  const [name, setName] = useState("");
+  const [nameValid, setNameValid] = useState(false);
+  const [nameFocus, setNameFocus] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const [emailValid, setEmailValid] = useState(false);
+  const [emailFocus, setEmailFocus] = useState(false);
 
   const [pass, setPass] = useState("");
   const [passValid, setPassValid] = useState(false);
@@ -30,12 +37,11 @@ const AddUser = () => {
   const [passConfirmFocus, setPassConfirmFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState();
-  const [addUser] = useAddUserMutation();
 
   const navigator = useNavigate();
 
   useEffect(() => {
-    userRef.current?.focus();
+    nameRef.current?.focus();
   }, []);
 
   useEffect(() => {
@@ -45,35 +51,44 @@ const AddUser = () => {
   }, [errMsg]);
 
   useEffect(() => {
-    setUserValid(NAME_RGX.test(user));
-  }, [user]);
+    setNameValid(NAME_RGX.test(name));
+  }, [name]);
+
+  useEffect(() => {
+    setEmailValid(EMAIL_RGX.test(email));
+  }, [email]);
 
   useEffect(() => {
     setPassValid(PASS_RGX.test(pass));
     setPassConfirmValid(pass === passConfirm && pass);
   }, [pass, passConfirm]);
-
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (!NAME_RGX.test(user) || !PASS_RGX.test(pass)) {
+    if (
+      !NAME_RGX.test(name) ||
+      !PASS_RGX.test(pass) ||
+      !EMAIL_RGX.test(email)
+    ) {
       setErrMsg("invalid Entry");
       return;
     }
     try {
-      await addUser({ username: user, password: pass }).unwrap();
+      await addUser({ name, email, password: pass }).unwrap();
+      navigator("/dashboard/users");
     } catch (err) {
+      setEmail("");
+      setName("");
+      setPass("");
+      setPassConfirm("");
       if (!err.status) {
         setErrMsg("network err");
       } else if (err.status === 409) {
-        setErrMsg("the username is already exist");
+        setErrMsg("the email is already exist");
       } else {
         setErrMsg("register failed");
       }
     }
-    setPass("");
-    setPassConfirm("");
-    navigator("/dashboard/users");
   };
 
   return (
@@ -92,22 +107,41 @@ const AddUser = () => {
         </Alert>
       )}
       <h2 className="text-center mb-3">add user</h2>
-      <Form.Group className="mb-3" controlId="username">
-        <Form.Label>username</Form.Label>
+      <Form.Group className="mb-3" controlId="name">
+        <Form.Label>name</Form.Label>
         <Form.Control
           type="text"
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
-          onBlur={() => setUserFocus(false)}
-          onFocus={() => setUserFocus(true)}
-          isInvalid={userFocus && !userValid && user}
-          isValid={userValid}
+          value={name}
+          onChange={(e) =>
+            setName(e.target.value.replace(/\s{2,}/g, " ").trimStart())
+          }
+          onBlur={() => setNameFocus(false)}
+          onFocus={() => setNameFocus(true)}
+          isInvalid={nameFocus && !nameValid && name}
+          isValid={nameValid}
           autoComplete="off"
-          ref={userRef}
+          ref={nameRef}
         />
         <Form.Control.Feedback type="invalid">
-          the username should contain only letters or number and should start
-          with letter and it contain 4-23 characters
+          the name should contain only letters or space and should start with
+          letter and contain 4-23 characters
+        </Form.Control.Feedback>
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="email">
+        <Form.Label>email</Form.Label>
+        <Form.Control
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => setEmailFocus(false)}
+          onFocus={() => setEmailFocus(true)}
+          isInvalid={emailFocus && !emailValid && email}
+          isValid={emailValid}
+          autoComplete="off"
+          required
+        />
+        <Form.Control.Feedback type="invalid">
+          please write a valid email
         </Form.Control.Feedback>
       </Form.Group>
       <Form.Group className="mb-3" controlId="pass">
@@ -144,9 +178,8 @@ const AddUser = () => {
       <Button
         type="submit"
         className="text-capitalize d-block mx-auto mt-4 px-3"
-        disabled={!passValid || !userValid || !passConfirmValid}
       >
-        add
+        sign up
       </Button>
     </Form>
   );

@@ -8,14 +8,19 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 const Register = () => {
-  const NAME_RGX = /^[a-zA-Z][a-zA-Z0-9]{3,23}$/;
+  const NAME_RGX = /^(?=.{4,24}$)[a-zA-Z]+(\s[a-zA-Z]*)*$/;
+  const EMAIL_RGX = /^[a-zA-Z0-9]+@[a-zA-Z]+[.][a-zA-Z]+$/;
   const PASS_RGX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%/]).{8,24}$/;
-  const userRef = useRef();
+  const nameRef = useRef();
   const errorRef = useRef();
 
-  const [user, setUser] = useState("");
-  const [userValid, setUserValid] = useState(false);
-  const [userFocus, setUserFocus] = useState(false);
+  const [name, setName] = useState("");
+  const [nameValid, setNameValid] = useState(false);
+  const [nameFocus, setNameFocus] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const [emailValid, setEmailValid] = useState(false);
+  const [emailFocus, setEmailFocus] = useState(false);
 
   const [pass, setPass] = useState("");
   const [passValid, setPassValid] = useState(false);
@@ -35,7 +40,7 @@ const Register = () => {
   const from = location.state?.from || "/";
 
   useEffect(() => {
-    userRef.current?.focus();
+    nameRef.current?.focus();
   }, []);
 
   useEffect(() => {
@@ -45,8 +50,12 @@ const Register = () => {
   }, [errMsg]);
 
   useEffect(() => {
-    setUserValid(NAME_RGX.test(user));
-  }, [user]);
+    setNameValid(NAME_RGX.test(name));
+  }, [name]);
+
+  useEffect(() => {
+    setEmailValid(EMAIL_RGX.test(email));
+  }, [email]);
 
   useEffect(() => {
     setPassValid(PASS_RGX.test(pass));
@@ -56,13 +65,17 @@ const Register = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (!NAME_RGX.test(user) || !PASS_RGX.test(pass)) {
+    if (
+      !NAME_RGX.test(name) ||
+      !PASS_RGX.test(pass) ||
+      !EMAIL_RGX.test(email)
+    ) {
       setErrMsg("invalid Entry");
       return;
     }
     try {
-      const res = await register({ username: user, password: pass }).unwrap();
-      dispatch(setCredentials({ user, ...res }));
+      const res = await register({ name, email, password: pass }).unwrap();
+      dispatch(setCredentials({ user: email, ...res }));
       navigator(from, { replace: true });
     } catch (err) {
       if (!err.status) {
@@ -73,7 +86,7 @@ const Register = () => {
         setErrMsg("register failed");
       }
     }
-    setUser("");
+    setName("");
     setPass("");
     setPassConfirm("");
   };
@@ -94,22 +107,41 @@ const Register = () => {
         </Alert>
       )}
       <h2 className="text-center mb-3">register</h2>
-      <Form.Group className="mb-3" controlId="username">
-        <Form.Label>username</Form.Label>
+      <Form.Group className="mb-3" controlId="name">
+        <Form.Label>name</Form.Label>
         <Form.Control
           type="text"
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
-          onBlur={() => setUserFocus(false)}
-          onFocus={() => setUserFocus(true)}
-          isInvalid={userFocus && !userValid && user}
-          isValid={userValid}
+          value={name}
+          onChange={(e) =>
+            setName(e.target.value.replace(/\s{2,}/g, " ").trimStart())
+          }
+          onBlur={() => setNameFocus(false)}
+          onFocus={() => setNameFocus(true)}
+          isInvalid={nameFocus && !nameValid && name}
+          isValid={nameValid}
           autoComplete="off"
-          ref={userRef}
+          ref={nameRef}
         />
         <Form.Control.Feedback type="invalid">
-          the username should contain only letters or number and should start
-          with letter and it contain 4-23 characters
+          the name should contain only letters or space and should start with
+          letter and contain 4-23 characters
+        </Form.Control.Feedback>
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="email">
+        <Form.Label>email</Form.Label>
+        <Form.Control
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => setEmailFocus(false)}
+          onFocus={() => setEmailFocus(true)}
+          isInvalid={emailFocus && !emailValid && email}
+          isValid={emailValid}
+          autoComplete="off"
+          required
+        />
+        <Form.Control.Feedback type="invalid">
+          please write a valid email
         </Form.Control.Feedback>
       </Form.Group>
       <Form.Group className="mb-3" controlId="pass">
