@@ -1,69 +1,29 @@
 {
   "users": [
     {
-      "id": "18cd1c31a48",
+      "id": "18d06a48b17",
       "username": "moustafa",
-      "password": "$2a$10$ZImCN..X7iXI76XmHQ2nd.q3wTOLwx4.dETfSAYEKcYWKtwKyrNxS",
       "roles": [
         "ADMIN"
       ],
-      "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4Y2QxYzMxYTQ4IiwidXNlcm5hbWUiOiJtb3VzdGFmYSIsInJvbGVzIjpbIkFETUlOIl0sImRhdGUiOiIzZTYzMzdkNTUwLmQxNTQiLCJpYXQiOjE3MDUxNDY0MDQsImV4cCI6MTcwNTE1MDAwNH0.6n6e0mqUadTERPIussPE0yv6IjeymV5H3A5AefazvE4"
+      "password": "$2a$10$z2B5k9LjaymiE7gxBQyqWeuSuX4pCW7UzvqeS17PAD/CFdf/neSPy",
+      "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4ZDA2YTQ4YjE3IiwidXNlcm5hbWUiOiJtb3VzdGFmYSIsInJvbGVzIjpbIkFETUlOIl0sImRhdGUiOiIxMzVlZDY4ZGYxNC5lYzIiLCJpYXQiOjE3MDUyMzE3NDYsImV4cCI6MTcwNTIzNTM0Nn0.gUdzymt8n1A1pie7cQ3VxKMdMCBOIrg9UTjBKqT3Kso"
     },
     {
-      "id": "18cd1c31a49",
-      "username": "abas",
-      "password": "Mos@25/9/2001",
-      "roles": [
-        "USER"
-      ]
-    },
-    {
-      "id": "18cd1c31a46",
-      "username": "ahmed",
-      "password": "$2a$10$ZImCN..X7iXI76XmHQ2nd.q3wTOLwx4.dETfSAYEKcYWKtwKyrNxS",
-      "roles": [
-        "EDITOR"
-      ]
-    },
-    {
-      "id": "18cd735fafd",
-      "username": "abdallah",
-      "password": "$2a$10$mhgslVj6I9vbkX0lcfkBuu2w8./wUujtylieBnEJ0ujJ9jOrKCZ1.",
-      "roles": [
-        "USER"
-      ]
-    },
-    {
-      "id": "18cfb143c85",
+      "id": "18d06a4fa8b",
       "username": "mahmoud",
       "roles": [
         "USER"
       ],
-      "password": "$2a$10$YE21GOb11P7iMt3YllBLheMJbU5I22hzXodgKqKF42Va5Fw8QPVX."
+      "password": "$2a$10$EpT/nbMZiv4LuT5qGnOGp.l67NtpvN7cjM0mMKchISO7iJQlPHbNO"
     },
     {
-      "id": "18cfb18082a",
-      "username": "Most",
+      "id": "18d06c79ad7",
+      "username": "ashraf",
       "roles": [
         "USER"
       ],
-      "password": "$2a$10$FAaVM4lGBvPIbFFHCCkvbuGYm6DhQtzUhMuAQu8nKrFNZXTC2lZLG"
-    },
-    {
-      "id": "18cfb1967c5",
-      "username": "Mostaf",
-      "roles": [
-        "USER"
-      ],
-      "password": "$2a$10$mHTNWcILXlZ9Xr09yCUfKO6eXIWkuuQrJ3qmlGh4kcVr0RsEAKl7u"
-    },
-    {
-      "id": "18cfb1a29f1",
-      "username": "abde",
-      "roles": [
-        "USER"
-      ],
-      "password": "$2a$10$P/uzeqPlOApom0K7zHQGregS6LrGbPse/kbqe658njeBjSAn63vFS"
+      "password": "$2a$10$gc1fuO6Fgu3OHkCXi0QGqOEpD5kLTCzB1nbOxgrc8K3Y6bQX6.sm."
     }
   ]
 }

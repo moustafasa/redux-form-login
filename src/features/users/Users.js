@@ -1,10 +1,11 @@
 import React from "react";
-import { useGetUsersQuery } from "./usersApiSlice";
+import { useDeleteUserMutation, useGetUsersQuery } from "./usersApiSlice";
 import { Button, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const Users = () => {
   const { data: users = [] } = useGetUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
 
   return (
     <div>
@@ -35,7 +36,11 @@ const Users = () => {
                   >
                     edit
                   </Button>
-                  <Button className="text-capitalize" variant="danger">
+                  <Button
+                    className="text-capitalize"
+                    variant="danger"
+                    onClick={() => deleteUser(user.id)}
+                  >
                     delete
                   </Button>
                 </div>

@@ -70,7 +70,7 @@ const checkOrigin = (req, res, next) => {
 server.use(checkOrigin);
 
 server.use((req, res, next) => {
-  if (req.method === "POST") {
+  if (["POST", "PUT"].includes(req.method) && req.path !== "/login") {
     // Hash the password with bcrypt
     bcrypt.hash(req.body.password, SALT_ROUNDS, (err, hash) => {
       if (err) {
@@ -115,6 +115,32 @@ server.post("/register", (req, res) => {
 
     // Return a 201 Created response with the token
     res.status(201).json({ accessToken: token });
+  }
+});
+
+// A middleware to handle user registration
+server.post("/users/add", (req, res) => {
+  // Get the user data from the request body
+  const { username, password, roles = ["USER"] } = req.body;
+
+  // Check if the username is already taken
+  const existingUser = db.get("users").find({ username }).value();
+  if (existingUser) {
+    // Return a 409 Conflict response
+    res.status(409).send("username already exists");
+  } else {
+    // Create a new user record
+    const payload = {
+      id: new Date().getTime().toString(16),
+      username,
+      roles,
+    };
+    db.get("users")
+      .push({ ...payload, password })
+      .write();
+
+    // Return a 201 Created response with the token
+    res.sendStatus(201);
   }
 });
 
@@ -287,6 +313,7 @@ server.get("/user", (req, res) => {
 });
 
 server.get("/users/:id", (req, res) => {
+  console.log("dsjalkfd");
   const { id } = req.params;
   const user = db.get("users").find({ id }).value();
   if (user) {
@@ -296,11 +323,10 @@ server.get("/users/:id", (req, res) => {
   }
 });
 
-server.put("/users/:id", (req, res) => {
+server.put("/users/update/:id", (req, res) => {
   const { id } = req.params;
   const { username, password } = req.body;
   const user = db.get("users").find({ id }).value();
-  console.log(user);
   if (user.username) {
     if (username) {
       if (db.get("users").find({ username }).value()) {
@@ -314,6 +340,18 @@ server.put("/users/:id", (req, res) => {
     }
     db.write();
     res.status(201).send("user updated successfully");
+  } else {
+    res.status(404).send("user not found");
+  }
+});
+
+server.delete("/users/delete/:id", (req, res) => {
+  console.log("jkldsajfdsajlk");
+  const { id } = req.params;
+  const user = db.get("users").find({ id }).value();
+  if (user) {
+    db.get("users").remove({ id }).write();
+    res.status(201).send("deleted");
   } else {
     res.status(404).send("user not found");
   }

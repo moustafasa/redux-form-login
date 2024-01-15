@@ -77,9 +77,9 @@ const EditUser = () => {
         setErrMsg("register failed");
       }
     }
-    setUser("");
     setPass("");
     setPassConfirm("");
+    navigator("/dashboard/users");
   };
 
   return (
@@ -157,7 +157,7 @@ const EditUser = () => {
           !passConfirmValid
         }
       >
-        sign up
+        update
       </Button>
     </Form>
   );

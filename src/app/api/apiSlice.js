@@ -40,7 +40,7 @@ const axiosBaseQuery = async (args, { getState }, extra) => {
       data: res.data,
     };
   } catch (axiosErr) {
-    console.error(axiosErr);
+    console.error(axiosErr.response);
     return {
       error: {
         status: axiosErr?.response?.status,
@@ -80,5 +80,6 @@ const baseQueryReauth = async (args, api, extra) => {
 
 export const apiSlice = createApi({
   baseQuery: baseQueryReauth,
+  tagTypes: ["Users"],
   endpoints: (builder) => ({}),
 });
