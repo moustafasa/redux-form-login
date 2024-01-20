@@ -10,7 +10,7 @@ const server = jsonServer.create();
 const router = jsonServer.router("src/app/db.json");
 const middlewares = jsonServer.defaults();
 
-const allowedHosts = ["http://localhost:3001"];
+const allowedHosts = ["http://localhost:3001", "http://localhost:3002"];
 
 const db = router.db;
 
